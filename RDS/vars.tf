@@ -10,10 +10,6 @@ variable "region" {
     default = "eu-west-1"
 }
 
-variable "discord_webhook_url" {
-  description = "Discord Webhook URL"
-}
-
 variable "db_username" {
     description = "Username in RDS"
 }

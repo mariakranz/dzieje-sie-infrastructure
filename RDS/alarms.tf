@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_status_alarm" {
   alarm_actions       = [aws_sns_topic.rds_alarms_topic.arn]
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.myinstance.id
+    DBInstanceIdentifier = aws_db_instance.myinstance.identifier
   }
 }   
 
@@ -29,14 +29,14 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_alarm" {
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
   namespace           = "AWS/RDS"
-  period              = 60 # 5 minutes
+  period              = 300 # 5 minutes
   statistic           = "Average"
-  threshold           = 1
+  threshold           = 80  #PERCENTAGE
   alarm_description   = "RDS MySQL CPU Utilization High"
   alarm_actions       = [aws_sns_topic.rds_alarms_topic.arn]
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.myinstance.id
+    DBInstanceIdentifier = aws_db_instance.myinstance.identifier
   }
 }
 
@@ -47,14 +47,14 @@ resource "aws_cloudwatch_metric_alarm" "memory_usage_alarm" {
   evaluation_periods  = 2
   metric_name         = "FreeableMemory"
   namespace           = "AWS/RDS"
-  period              = 60 # 5 minutes
+  period              = 300 # 5 minutes
   statistic           = "Average"
-  threshold           = 1
+  threshold           = 750 # MiB
   alarm_description   = "RDS MySQL Memory Usage High"
   alarm_actions       = [aws_sns_topic.rds_alarms_topic.arn]
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.myinstance.id
+    DBInstanceIdentifier = aws_db_instance.myinstance.identifier
   }
 }
 
@@ -72,13 +72,7 @@ resource "aws_cloudwatch_metric_alarm" "db_errors_alarm" {
   alarm_actions       = [aws_sns_topic.rds_alarms_topic.arn]
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.myinstance.id
+    DBInstanceIdentifier = aws_db_instance.myinstance.identifier
   }
 }
 
-# Create an SNS subscription to Discord Webhook 
-resource "aws_sns_topic_subscription" "discord_subscription" {
-  topic_arn = aws_sns_topic.rds_alarms_topic.arn
-  protocol  = "https"
-  endpoint  = var.discord_webhook_url
-}
