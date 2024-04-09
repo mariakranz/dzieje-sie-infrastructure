@@ -49,7 +49,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_usage_alarm" {
   namespace           = "AWS/RDS"
   period              = 300 # 5 minutes
   statistic           = "Average"
-  threshold           = 750 # MiB
+  threshold           = 700000000 # MiB
   alarm_description   = "RDS MySQL Memory Usage High"
   alarm_actions       = [aws_sns_topic.rds_alarms_topic.arn]
 
